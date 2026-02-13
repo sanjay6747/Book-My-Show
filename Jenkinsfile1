@@ -51,11 +51,18 @@ pipeline {
                 '''
             }
         }
-       stage('OWASP FS Scan') {
+     stage('OWASP FS Scan') {
     steps {
         dependencyCheck(
             odcInstallation: 'DP-Check',
-            additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --noupdate'
+            additionalArguments: '''
+            --scan ./ 
+            --disableYarnAudit 
+            --disableNodeAudit 
+            --disableAssembly
+            --noupdate
+            --failOnCVSS 7
+            '''
         )
         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
     }
